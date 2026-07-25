@@ -2,6 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaTrashAlt, FaPlus, FaMinus, FaShoppingBag } from 'react-icons/fa';
+import { FaArrowLeft } from "react-icons/fa";
 
 // Mock cart data
 const INITIAL_CART = [
@@ -35,23 +36,23 @@ const Cart = () => {
     <section ref={sectionRef} className="min-h-screen bg-black text-white pt-32 px-6 md:px-12 pb-20">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-12">
-          <div>
-            <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase">
-              Your <span className="text-red-500">Cart</span>
-            </h1>
-            <p className="text-white/40 font-mono tracking-[0.5em] text-sm mt-4">
-              {cartItems.length} ITEMS
-            </p>
-          </div>
-          <Link
-            to="/shop"
-            className="text-white/40 hover:text-white transition-colors font-mono text-sm tracking-widest flex items-center gap-2"
-          >
-            <FaShoppingBag size={16} />
-            Continue Shopping
-          </Link>
-        </div>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-8 md:mb-12">
+  <div>
+    <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase">
+      Your <span className="text-red-500">Cart</span>
+    </h1>
+    <p className="text-white/40 font-mono tracking-[0.3em] md:tracking-[0.5em] text-xs sm:text-sm mt-2 md:mt-4">
+      {cartItems.length} ITEMS
+    </p>
+  </div>
+  <Link
+    to="/shop"
+    className="text-white/80 hover:text-red-500 transition-colors font-mono text-[10px] sm:text-sm tracking-widest flex items-center gap-2"
+  >
+    <FaArrowLeft size={14} className="sm:size-[16px]" />
+    <span className="xs:hidden">Continue Shopping</span>
+  </Link>
+</div>
 
         {cartItems.length === 0 ? (
           // Empty Cart

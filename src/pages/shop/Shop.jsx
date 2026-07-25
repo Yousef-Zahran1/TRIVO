@@ -10,8 +10,7 @@ const PRODUCTS = [
   { id: 4, name: 'TRIVO Cap', price: '250 EGY', oldPrice: null, category: 'Accessories', img: '/products/product4.jpg', inStock: true },
   { id: 5, name: 'Glitch T-Shirt', price: '450 EGY', oldPrice: '550', category: 'T-Shirts', img: '/products/product5.jpg', inStock: true },
   { id: 6, name: 'Racer Jacket', price: '1200 EGY', oldPrice: '1500', category: 'Jackets', img: '/products/product6.jpg', inStock: true },
-  { id: 7, name: 'Tech Backpack', price: '800 EGY', oldPrice: null, category: 'Accessories', img: '/products/product7.jpg', inStock: true },
-  { id: 8, name: 'Slim Fit Jeans', price: '650 EGY', oldPrice: '800', category: 'Pants', img: '/products/product8.jpg', inStock: false },
+  { id: 7, name: 'Tech Backpack', price: '800 EGY', oldPrice: null, category: 'Accessories', img: '/products/product7.jpg', inStock: true }
 ];
 
 const CATEGORIES = ['All', 'Boxes', 'Hoodies', 'Shoes', 'T-Shirts', 'Jackets', 'Accessories', 'Pants'];
@@ -97,11 +96,16 @@ const Shop = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-white/5 border border-white/10 px-4 py-2 text-white text-sm focus:border-red-500 outline-none transition-colors"
+              className="bg-white/5 border border-white/10 px-4 py-2 text-white text-sm focus:border-red-500 outline-none transition-colors appearance-none cursor-pointer pr-8 relative"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='white' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 10px center',
+              }}
             >
-              <option value="default">Default</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
+              <option value="default" className="bg-black text-white">Default</option>
+              <option value="price-low" className="bg-black text-white">Price: Low to High</option>
+              <option value="price-high" className="bg-black text-white">Price: High to Low</option>
             </select>
           </div>
         </div>

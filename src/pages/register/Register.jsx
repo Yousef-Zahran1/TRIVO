@@ -33,10 +33,13 @@ const Register = () => {
   };
 
   return (
-    <section ref={sectionRef} className="min-h-screen bg-black text-white pt-32 px-6 flex items-center justify-center pb-20">
-      <div className="max-w-md w-full">
+    <section 
+      ref={sectionRef} 
+      className="min-h-screen bg-black text-white pt-32 px-6 pb-20 flex items-start md:items-center justify-center"
+    >
+      <div className="max-w-md w-full mt-4 md:mt-0">
         {/* Brand */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 md:mb-12">
           <div className="flex justify-center mb-4">
             <img src="/logo5.jpg" alt="TRIVO" className="h-16 w-16 animate-spin-y" />
           </div>
@@ -140,7 +143,7 @@ const Register = () => {
             <button
               type="button"
               onClick={() => setAgreeTerms(!agreeTerms)}
-              className={`w-5 h-5 border flex items-center justify-center transition-colors ${
+              className={`w-5 h-5 border flex items-center justify-center transition-colors flex-shrink-0 ${
                 agreeTerms ? 'bg-red-600 border-red-600' : 'border-white/30'
               }`}
             >
@@ -167,7 +170,7 @@ const Register = () => {
         </form>
 
         {/* Login Link */}
-        <div className="text-center mt-8">
+        <div className="text-center mt-8 pb-4">
           <p className="text-white/40 font-mono text-sm">
             Already have an account?{' '}
             <Link to="/login" className="text-white hover:text-red-500 transition-colors font-bold">

@@ -1,29 +1,41 @@
 // src/components/Footer.jsx
-import React, { useRef } from 'react'
-import { Link } from 'react-router-dom'; // <-- أضف ده
+import React, { useRef, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const Footer = () => {
   const footerRef = useRef(null);
   const logoRef = useRef(null);
+  const location = useLocation();
 
   useGSAP(() => {
-    gsap.fromTo(logoRef.current, 
-      { scale: 0.7, y: -50, opacity: 0 },
-      {
-        scale: 1,
-        y: 0,
-        opacity: 1,
-        scrollTrigger: {
-          trigger: footerRef.current,
-          start: "top bottom",
-          end: "bottom bottom",
-          scrub: 2,
+    // تأكد من إنهاء أي أنيميشن سابق
+    const ctx = gsap.context(() => {
+      gsap.fromTo(logoRef.current, 
+        { scale: 0.7, y: -50, opacity: 0 },
+        {
+          scale: 1,
+          y: 0,
+          opacity: 1,
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: "top bottom",
+            end: "bottom bottom",
+            scrub: 2,
+          }
         }
-      }
-    );
-  }, { scope: footerRef });
+      );
+    }, footerRef);
+
+    return () => ctx.revert(); // تنظيف عند إزالة المكون
+  }, { scope: footerRef, dependencies: [location.pathname] }); // إضافة location.pathname كـ dependency
+
+  // تحديث ScrollTrigger عند تغيير الصفحة
+  useEffect(() => {
+    ScrollTrigger.refresh();
+  }, [location.pathname]);
 
   return (
     <footer ref={footerRef} className="bg-black text-white pt-3 pb-8 px-6 relative overflow-hidden">

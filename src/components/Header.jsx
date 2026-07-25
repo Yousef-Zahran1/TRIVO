@@ -44,38 +44,14 @@ const Header = () => {
   const handleScrollToSection = (sectionId) => {
     setIsOpen(false);
     
-    if (location.pathname !== '/') {
-      // لو مش في الهوم، نروح للهوم وبعدين نسكرول
-      navigate('/');
-      // ننتظر شوية عشان الصفحة تتحمل وبعدين نسكرول
-      setTimeout(() => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          // حساب الموضع الصحيح مع مراعاة الـ Header
-          const headerHeight = headerRef.current?.offsetHeight || 80;
-          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-          const offsetPosition = elementPosition - headerHeight - 20; // 20px مسافة إضافية
-        
-          const smoother = ScrollSmoother.get();
-          if (smoother) {
-            smoother.scrollTo(offsetPosition, true, 'top');
-          } else {
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth'
-            });
-          }
-        }
-      }, 600);
-    } else {
-      // لو في الهوم، نسكرول مباشرة
+    const scrollToElement = () => {
       const element = document.getElementById(sectionId);
       if (element) {
         // حساب الموضع الصحيح مع مراعاة الـ Header
         const headerHeight = headerRef.current?.offsetHeight || 80;
         const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = elementPosition - headerHeight - 20;
-        
+        const offsetPosition = elementPosition - headerHeight - 20; // 20px مسافة إضافية
+      
         const smoother = ScrollSmoother.get();
         if (smoother) {
           smoother.scrollTo(offsetPosition, true, 'top');
@@ -86,11 +62,22 @@ const Header = () => {
           });
         }
       }
+    };
+
+    if (location.pathname !== '/') {
+      // لو مش في الهوم، نروح للهوم مع الـ hash
+      navigate(`/#${sectionId}`);
+      // ننتظر شوية عشان الصفحة تتحمل وبعدين نسكرول
+      setTimeout(scrollToElement, 600);
+    } else {
+      // لو في الهوم، نضيف الـ hash ونعمل سكرول
+      window.history.pushState(null, '', `/#${sectionId}`);
+      scrollToElement();
     }
   };
 
   const navLinks = [
-    { name: 'home', path: '/' },
+    { name: 'Home', path: '/' },
     { name: 'Shop', path: '/shop' },
     { name: 'About', path: '/', section: 'about' },
     { name: 'Contact', path: '/', section: 'contact' },
@@ -115,7 +102,21 @@ const Header = () => {
         className="fixed top-4 left-0 right-0 mx-auto w-[92%] z-[100] px-6 md:px-10 py-4 flex justify-between items-center bg-black/20 backdrop-blur-md border border-white/10 rounded-full shadow-2xl will-change-transform"
       >
         {/* اللوجو */}
-        <Link to="/" className="flex items-center gap-2 group cursor-pointer relative z-[101]">
+        <Link 
+          to="/" 
+          onClick={() => {
+            // لو انت في الهوم، سكرول لفوق
+            if (location.pathname === '/') {
+              const smoother = ScrollSmoother.get();
+              if (smoother) {
+                smoother.scrollTo(0, true, 'top');
+              } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }
+          }}
+          className="flex items-center gap-2 group cursor-pointer relative z-[101]"
+        >
           <img 
             src="/logo5.jpg" 
             alt="TRIVO" 
@@ -126,24 +127,20 @@ const Header = () => {
         {/* الروابط للشاشات الكبيرة */}
         <nav className="hidden md:flex items-center gap-10">
           {navLinks.map((item) => {
-            // لو الرابط هو About أو Contact
+            // لو الرابط هو About أو Contact - يفضلوا أبيض دايماً
             if (item.section) {
               return (
                 <button
                   key={item.name}
                   onClick={() => handleScrollToSection(item.section)}
-                  className={`text-[14px] font-medium uppercase tracking-[0.2em] transition-colors cursor-pointer ${
-                    location.pathname === '/' && window.location.hash === `#${item.section}` 
-                      ? 'text-red-500' 
-                      : 'text-white/90 hover:text-red-500'
-                  }`}
+                  className="text-[14px] font-medium uppercase tracking-[0.2em] transition-colors cursor-pointer text-white/90 hover:text-red-500"
                 >
                   {item.name}
                 </button>
               );
             }
             
-            // Shop
+            // Home & Shop - يتغير لونهم حسب الصفحة
             return (
               <Link
                 key={item.name}
@@ -179,7 +176,7 @@ const Header = () => {
           >
             <FiShoppingBag size={23} className="transition-transform duration-300 hover:scale-110" />
             <span className="absolute -top-1 -right-1.5 bg-red-600 text-white font-mono text-[14px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-md">
-              0
+              3
             </span>
           </Link>
           
@@ -193,7 +190,7 @@ const Header = () => {
 
         {/* المنيو للموبايل */}
         <div className={`
-          absolute top-0 left-0 w-full h-[100vh] bg-black/95 backdrop-blur-xl 
+          absolute top-0 left-0 w-full h-auto py-40 bg-black/95 backdrop-blur-xl 
           rounded-[2rem] flex flex-col items-center justify-center gap-8
           transition-all duration-500 ease-in-out border border-white/10
           ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}
@@ -206,8 +203,9 @@ const Header = () => {
                   key={item.name}
                   onClick={() => handleScrollToSection(item.section)}
                   className={`
-                    text-2xl font-black uppercase tracking-[0.3em] text-white hover:text-red-500 
-                    transition-all transform ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}
+                    text-2xl font-black uppercase tracking-[0.3em] transition-all 
+                    transform ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}
+                    text-white hover:text-red-500
                   `}
                   style={{ transitionDelay: `${i * 100}ms` }}
                 >
@@ -221,8 +219,9 @@ const Header = () => {
                 to={item.path}
                 onClick={() => setIsOpen(false)}
                 className={`
-                  text-2xl font-black uppercase tracking-[0.3em] text-white hover:text-red-500 
-                  transition-all transform ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}
+                  text-2xl font-black uppercase tracking-[0.3em] transition-all 
+                  transform ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}
+                  ${location.pathname === item.path ? 'text-red-500' : 'text-white hover:text-red-500'}
                 `}
                 style={{ transitionDelay: `${i * 100}ms` }}
               >
@@ -230,15 +229,6 @@ const Header = () => {
               </Link>
             );
           })}
-          
-          <div className="flex gap-8 mt-4">
-            <Link to="/login" onClick={() => setIsOpen(false)} className="text-white/50 hover:text-red-500 transition-colors text-sm uppercase tracking-widest">
-              Login
-            </Link>
-            <Link to="/cart" onClick={() => setIsOpen(false)} className="text-white/50 hover:text-red-500 transition-colors text-sm uppercase tracking-widest">
-              Cart
-            </Link>
-          </div>
           
           <div className="absolute bottom-12 text-white/20 font-mono text-[10px] tracking-widest">
             TRIVO © 2026 / CUSTOM APPAREL

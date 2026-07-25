@@ -10,6 +10,7 @@ const PRODUCTS = [
   { id: 1, name: 'Cyber Edition Box', price: '550 EGY',oldPrice : '700', img: '/products/product1.jpg' },
   { id: 2, name: 'Neon Glitch Hoodie', price: '550 EGY',oldPrice : '700', img: '/products/product2.jpg' },
   { id: 3, name: 'Vortex Sneakers', price: '550 EGY',oldPrice : '700', img: '/products/product3.jpg' },
+  { id: 4, name: 'Glitch T-Shirt', price: '500 EGY',oldPrice : '650', img: '/products/product7.jpg' },
 ];
 
 const FeaturedProducts = () => {
