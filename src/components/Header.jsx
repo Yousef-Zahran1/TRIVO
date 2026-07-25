@@ -1,26 +1,26 @@
+// src/components/Header.jsx
 import React, { useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom'; // <-- أضف useLocation
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { HiOutlineMenuAlt3, HiX } from 'react-icons/hi';
-import { FiShoppingBag, FiUser } from 'react-icons/fi'; // أيقونات براندات فخمة ومودرن
+import { FiShoppingBag, FiUser } from 'react-icons/fi';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Header = () => {
   const headerRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation(); // <-- أضف ده
 
   useGSAP(() => {
-    // تأمين: لو المنيو مفتوحة في الموبايل، ميعملش أي حركة للهيدر
     if (isOpen) return;
 
     ScrollTrigger.create({
       start: "top top",
       end: "max",
       onUpdate: (self) => {
-        // self.direction === 1 (سكرول لتحت -> اخفي الهيدر)
-        // self.direction === -1 (سكرول لفوق -> ظهر الهيدر)
         if (self.direction === 1) {
           gsap.to(headerRef.current, { 
             yPercent: -150, 
@@ -29,59 +29,76 @@ const Header = () => {
           });
         } else if (self.direction === -1) {
           gsap.to(headerRef.current, { 
-            yPercent: 0, // يرجعه مكانه الطبيعي بالظبط
+            yPercent: 0,
             duration: 0.3, 
             ease: "power2.out" 
           });
         }
       }
     });
-  }, { scope: headerRef, dependencies: [isOpen] }); // إعادة بناء الـ trigger لو حالة الـ isOpen اتغيرت
+  }, { scope: headerRef, dependencies: [isOpen] });
 
-  const navLinks = ['Collection', 'About', 'Archive', 'Contact'];
+  const navLinks = [
+    { name: 'Collection', path: '/shop' },
+    { name: 'About', path: '/#about' },
+    { name: 'Archive', path: '/#archive' },
+    { name: 'Contact', path: '/#contact' },
+  ];
 
   return (
     <>
+    <style>{`
+      @keyframes spinY {
+        0% { transform: rotateY(0deg); }
+        50% { transform: rotateY(360deg); }
+        100% { transform: rotateY(0deg); }
+      }
+      .animate-spin-y {
+        animation: spinY 8s linear infinite;
+        perspective: 1000px;
+      }
+    `}</style>
+
       <header 
         ref={headerRef} 
         className="fixed top-4 left-0 right-0 mx-auto w-[92%] z-[100] px-6 md:px-10 py-4 flex justify-between items-center bg-black/20 backdrop-blur-md border border-white/10 rounded-full shadow-2xl will-change-transform"
       >
-        {/* اللوجو */}
-        <div className="flex items-center gap-2 group cursor-pointer relative z-[101]">
+        {/* اللوجو - يرجع للهوم */}
+        <Link to="/" className="flex items-center gap-2 group cursor-pointer relative z-[101]">
           <img 
-            src="/logo2.jpg" 
+            src="/logo5.jpg" 
             alt="TRIVO" 
-            className="h-5 md:h-6 w-auto transition-transform duration-500 group-hover:scale-110" 
+            className="h-10 w-10 animate-spin-y transition-transform duration-500 group-hover:scale-105"
           />
-        </div>
+        </Link>
 
         {/* الروابط للشاشات الكبيرة */}
         <nav className="hidden md:flex items-center gap-10">
           {navLinks.map((item) => (
-            <a 
-              key={item} 
-              href={`#${item.toLowerCase()}`}
-              className="text-[14px] font-medium uppercase tracking-[0.2em] text-white/90 hover:text-red-500 transition-colors"
+            <Link
+              key={item.name}
+              to={item.path}
+              className={`text-[14px] font-medium uppercase tracking-[0.2em] transition-colors ${
+                location.pathname === item.path ? 'text-red-500' : 'text-white/90 hover:text-red-500'
+              }`}
             >
-              {item}
-            </a>
+              {item.name}
+            </Link>
           ))}
         </nav>
 
         {/* الأزرار + أيقونة الموبايل */}
         <div className="flex items-center gap-4 md:gap-6 relative z-[101]">
-          <button className="text-white/70 hover:text-white transition-colors duration-300 cursor-pointer p-1" title="Account">
+          <Link to="/login" className="text-white/70 hover:text-white transition-colors duration-300 cursor-pointer p-1" title="Account">
             <FiUser size={23} className="transition-transform duration-300 hover:scale-110" />
-          </button>
+          </Link>
 
-          {/* حاوية أيقونة السلة مع العداد */}
-          <button className="relative text-white/70 hover:text-white transition-colors duration-300 cursor-pointer p-1" title="Cart">
+          <Link to="/cart" className="relative text-white/70 hover:text-white transition-colors duration-300 cursor-pointer p-1" title="Cart">
             <FiShoppingBag size={23} className="transition-transform duration-300 hover:scale-110" />
-            {/* بادج عداد المنتجات */}
             <span className="absolute -top-1 -right-1.5 bg-red-600 text-white font-mono text-[14px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-md">
               0
             </span>
-          </button>
+          </Link>
           
           <button 
             onClick={() => setIsOpen(!isOpen)}
@@ -100,9 +117,9 @@ const Header = () => {
           md:hidden
         `}>
           {navLinks.map((item, i) => (
-            <a 
-              key={item} 
-              href={`#${item.toLowerCase()}`}
+            <Link
+              key={item.name}
+              to={item.path}
               onClick={() => setIsOpen(false)}
               className={`
                 text-2xl font-black uppercase tracking-[0.3em] text-white hover:text-red-500 
@@ -110,8 +127,8 @@ const Header = () => {
               `}
               style={{ transitionDelay: `${i * 100}ms` }}
             >
-              {item}
-            </a>
+              {item.name}
+            </Link>
           ))}
           
           <div className="absolute bottom-12 text-white/20 font-mono text-[10px] tracking-widest">

@@ -1,14 +1,16 @@
+// src/App.jsx
 import React, { useRef } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 
-import Hero from "./components/Hero";
-import FeaturedProducts from "./components/FeaturedProducts";
-import About from "./components/About";
-import Offer from "./components/Offer";
-import Contact from "./components/Contact";
+import Home from "./pages/home/home";
+import Shop from "./pages/shop/Shop";
+import Login from "./pages/login/Login";
+import Register from "./pages/register/Register";
+import Cart from "./pages/cart/Cart";
 import Footer from "./components/Footer";
 import Header from './components/Header';
 
@@ -25,26 +27,27 @@ function App() {
       wrapper: wrapperRef.current,
       content: mainRef.current,
       smooth: 1.5,
-      effects: true, // عشان تقدر تستخدم data-speed
+      effects: true,
     });
   }, []);
 
   return (
-    <div className="bg-black" ref={wrapperRef} id="smooth-wrapper">
-      
-      {/* الحل السحري: الهيدر هنا بره الـ smooth-content عشان الـ transform مياكلوش ويطيره لفوق */}
-      <Header />
+    <Router>
+      <div className="bg-black" ref={wrapperRef} id="smooth-wrapper">
+        <Header />
 
-      <div ref={mainRef} id="smooth-content">
-        <Hero />
-        {/* السكشن الجديد */}
-        <FeaturedProducts />
-        <About />
-        <Offer />
-        <Contact />
-        <Footer />
+        <div ref={mainRef} id="smooth-content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/cart" element={<Cart />} />
+          </Routes>
+          <Footer />
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 

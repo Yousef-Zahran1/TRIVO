@@ -5,7 +5,7 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const moduleFrames = import.meta.glob('../assets/hero/*.jpg', { eager: true });
+const moduleFrames = import.meta.glob('../../../assets/hero/*.jpg', { eager: true });
 const imagesArray = Object.keys(moduleFrames).sort().map(key => moduleFrames[key].default);
 
 const Hero = () => {

@@ -1,0 +1,14 @@
+/* src/pages/Shop.css */
+
+/* تأثير النص المفرغ (Stroke) زي اللي في الـ Home */
+.text-stroke-white {
+  -webkit-text-stroke: 1px white;
+  text-stroke: 1px white;
+  color: transparent;
+}
+
+/* تخصيص لون التحديد (Highlight) ليتماشى مع البراند */
+::selection {
+  background: #ff0000; /* لون أحمر قوي */
+  color: #ffffff;
+}
