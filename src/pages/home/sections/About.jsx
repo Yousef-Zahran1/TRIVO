@@ -51,7 +51,7 @@ const About = () => {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="min-h-screen bg-black text-white py-32 px-6 relative overflow-hidden">
+    <section id="about" ref={containerRef} className="min-h-screen bg-black text-white pt-32 pb-10 px-6 relative overflow-hidden">
       
       {/* نص خلفي عملاق */}
       <div className="absolute top-20 left-0 text-[15rem] font-black text-white/[0.03] whitespace-nowrap pointer-events-none select-none uppercase italic">

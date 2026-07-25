@@ -13,6 +13,7 @@ import Register from "./pages/register/Register";
 import Cart from "./pages/cart/Cart";
 import Footer from "./components/Footer";
 import Header from './components/Header';
+import ScrollToTop from './components/ScrollToTop';
 
 // تسجيل الملحقات
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother);
@@ -35,7 +36,7 @@ function App() {
     <Router>
       <div className="bg-black" ref={wrapperRef} id="smooth-wrapper">
         <Header />
-
+        <ScrollToTop />
         <div ref={mainRef} id="smooth-content">
           <Routes>
             <Route path="/" element={<Home />} />

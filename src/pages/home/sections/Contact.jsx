@@ -21,10 +21,10 @@ const Contact = () => {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="min-h-screen bg-black text-white pt-32 pb-10 px-6 relative overflow-hidden">
+    <section id="contact" ref={containerRef} className="min-h-screen bg-black text-white pt-72 px-6 relative overflow-hidden">
       
       {/* عنوان جانبي ضخم للزينة */}
-      <div className="absolute -right-20 top-1/2 -translate-y-1/2 rotate-90 text-[10rem] font-black text-white/5 pointer-events-none select-none uppercase">
+      <div className="absolute -right-20 top-1/2 -translate-y-1/2 rotate-90 text-[8rem] font-black text-white/10 pointer-events-none select-none uppercase">
         Get In Touch
       </div>
 
