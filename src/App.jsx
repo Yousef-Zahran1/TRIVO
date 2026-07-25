@@ -6,7 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 
-import Home from "./pages/home/home";
+import Home from "./pages/home/Home";
 import Shop from "./pages/shop/Shop";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
